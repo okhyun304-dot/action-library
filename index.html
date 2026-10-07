@@ -104,9 +104,11 @@ const cover = (b) => b.cover ? `<span class="cover"><img src="${esc(b.cover)}" a
 function go(cat) { state.cat = cat; state.page = 1; state.view = 'grid'; render(); window.scrollTo(0, 0); }
 
 function filtered() {
-  const q = state.q.trim().toLowerCase();
+  // 띄어쓰기·문장부호 무시 검색 ('총, 균, 쇠' ↔ '총 균 쇠')
+  const norm = s => String(s || '').toLowerCase().replace(/[\s\-_:;,.·・'"!?()\[\]<>《》〈〉「」『』]/g, '');
+  const q = norm(state.q);
   let list = BOOKS.filter(b => (!state.cat || b.genre[0] === state.cat) &&
-    (!q || (b.title + ' ' + b.dir + ' ' + b.publisher).toLowerCase().includes(q)));
+    (!q || norm(b.title + b.dir + b.publisher).includes(q)));
   const by = { title: (a, b) => a.title.localeCompare(b.title, 'ko'), author: (a, b) => a.dir.localeCompare(b.dir, 'ko'),
                year: (a, b) => (b.year || '').localeCompare(a.year || '') };
   if (by[state.sort]) list = [...list].sort(by[state.sort]);
@@ -170,7 +172,7 @@ function openBook(id) {
         <div class="kind">책 · ${esc(b.genre[0])}</div>
         <h1>${esc(b.title)}</h1>
         <div class="meta">${esc(b.dir || '저자 미상')}${b.year ? ' · ' + b.year : ''}${b.publisher ? ' · ' + esc(b.publisher) : ''}</div>
-        <div class="own">✓ 대장님 책장 ${b.copies}권</div>
+        <div class="own">✓ 대장님 책장 ${b.copies}권${b.place ? ' · 📍 ' + esc(b.place) : ''}</div>
         ${b.desc ? `<p class="desc">${esc(b.desc)}${b.desc.length >= 190 ? '…' : ''}</p><div class="src">책 소개: 카카오 책 검색 (출판사 제공)</div>` : ''}
         ${b.link ? `<p style="margin-top:14px"><a class="btn" href="${esc(b.link)}" target="_blank" rel="noopener">책 정보 보기</a></p>` : ''}
       </div>
