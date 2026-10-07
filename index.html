@@ -80,6 +80,111 @@ main { padding:18px 0 70px; }
 .s .track { grid-column:1/-1; }
 .s .miss { grid-column:1/-1; font-size:12px; color:var(--warn); }
 footer { color:var(--dim); font-size:12px; padding:20px 0 36px; border-top:1px solid var(--line); }
+
+/* ── 책장 지도 ── */
+.modal { z-index:80; }  /* 칸 서랍(70) 위에 책 상세 창 */
+.btn.on { border-color:var(--accent); color:var(--accent); }
+.room { --wood:#6b4528; --wood-d:#4a2e19; --wood-l:#8d6038; --back:#2a1b10; --brass1:#e2c486; --brass2:#a9813c;
+  position:relative; padding:26px 22px 0; border-radius:18px; overflow:hidden; border:1px solid #26211c;
+  background:radial-gradient(1200px 500px at 50% -10%, rgba(255,214,150,.10), transparent 60%), linear-gradient(180deg,#1b1714 0%,#141210 70%,#0f0d0b 100%); }
+.room::after { content:""; display:block; height:26px; margin:0 -22px; background:linear-gradient(180deg,#2a221b,#1a1511); border-top:1px solid #3a2f25; }
+.mhead { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-bottom:22px; }
+.mhead .eyebrow { font-size:11px; letter-spacing:.28em; color:#b89a72; font-weight:700; }
+.mhead h1 { margin:6px 0; font-size:28px; letter-spacing:-.02em; color:#f3ead9; }
+.chips { display:flex; gap:8px; flex-wrap:wrap; }
+.chips span { font-size:12px; color:#c9b79c; background:rgba(255,240,215,.06); border:1px solid rgba(255,240,215,.1); padding:4px 10px; border-radius:999px; }
+.seek { flex:1 1 320px; max-width:480px; position:relative; display:block; }
+.seek input { width:100%; font-size:16px; padding:14px 16px 14px 44px; border-radius:12px; background:rgba(255,248,235,.06); border:1px solid rgba(255,240,215,.16); color:#f6eee0; outline:none; }
+.seek input:focus { border-color:var(--brass1); }
+.seek input::placeholder { color:#9d8a70; }
+.seek svg { position:absolute; left:15px; top:50%; transform:translateY(-50%); opacity:.6; }
+.mres { display:flex; gap:8px; flex-wrap:wrap; margin:-8px 0 18px; }
+.mres button { all:unset; cursor:pointer; display:inline-flex; gap:8px; align-items:center; font-size:13px; padding:7px 12px; border-radius:999px; background:rgba(62,207,142,.12); border:1px solid rgba(62,207,142,.35); color:#dff7ea; }
+.mres button i { font-style:normal; color:var(--accent); font-weight:700; }
+.mres .none { font-size:13px; color:#a8957c; }
+.wall { display:grid; grid-template-columns:1fr .62fr 1.05fr; gap:26px; align-items:start; }
+.case { position:relative; padding:12px 12px 4px; border-radius:6px 6px 2px 2px;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 2px, transparent 2px 9px), linear-gradient(90deg,var(--wood-d),var(--wood) 8%,var(--wood-l) 50%,var(--wood) 92%,var(--wood-d));
+  box-shadow:0 30px 50px -20px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.12); }
+.plaque { position:absolute; top:-13px; left:50%; transform:translateX(-50%); white-space:nowrap; z-index:2; font-weight:800; font-size:12px; line-height:1; letter-spacing:.14em;
+  padding:7px 14px; border-radius:4px; color:#3b2a0e; background:linear-gradient(180deg,var(--brass1),var(--brass2)); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.5); }
+.plaque small { font-weight:600; letter-spacing:0; margin-left:6px; opacity:.75; }
+.lv { display:grid; grid-template-columns:repeat(var(--slots), minmax(0,1fr)); gap:10px; }
+.cell { position:relative; min-width:0; cursor:pointer; padding:10px 8px 0; background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.12) 28%, rgba(0,0,0,0) 60%), var(--back);
+  box-shadow:inset 6px 0 10px -6px rgba(0,0,0,.8), inset -6px 0 10px -6px rgba(0,0,0,.8); }
+.cell::after { content:""; display:block; height:11px; margin:0 -8px; position:relative; z-index:1; background:linear-gradient(180deg,#a77748 0,#8a5f37 2px,#6a4527 60%,#4c311b 100%); box-shadow:0 4px 6px rgba(0,0,0,.45); }
+.cell.sel { box-shadow:inset 0 0 0 2px var(--brass1), 0 0 24px rgba(226,196,134,.25); }
+.spn { display:flex; align-items:flex-end; height:104px; gap:1px; }
+.cempty { height:104px; display:flex; align-items:center; justify-content:center; color:#7d6650; font-size:12px; }
+.ctag { position:absolute; left:50%; bottom:-1px; transform:translateX(-50%); z-index:2; font-size:9.5px; font-weight:800; letter-spacing:.06em; color:#3b2a0e; padding:2px 6px 1px; border-radius:2px;
+  background:linear-gradient(180deg,var(--brass1),var(--brass2)); box-shadow:0 1px 2px rgba(0,0,0,.5); white-space:nowrap; }
+.ctag b { font-weight:600; opacity:.7; margin-left:3px; }
+.backrow { position:absolute; top:8px; right:8px; z-index:2; font-size:10px; color:#f0c98a; background:rgba(0,0,0,.55); padding:2px 6px; border-radius:3px; }
+.bk { position:relative; flex:var(--w) 1 0; min-width:2px; max-width:24px; height:var(--hgt); border-radius:2px 2px 1px 1px;
+  background:linear-gradient(90deg, rgba(0,0,0,.30) 0, rgba(255,255,255,.16) 22%, rgba(255,255,255,.05) 48%, rgba(0,0,0,.08) 78%, rgba(0,0,0,.38) 100%), var(--c);
+  color:var(--ink2); writing-mode:vertical-rl; overflow:hidden; cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 1px 0 1px rgba(0,0,0,.35); transition:transform .18s ease, opacity .25s, filter .25s; }
+.bk i { position:absolute; inset:14% 0 17% 0; display:flex; align-items:center; font-weight:700; font-size:9.5px; line-height:1; font-style:normal; letter-spacing:.04em; white-space:nowrap; overflow:hidden; }
+.bk.serif i { font-family:"Noto Serif KR","Nanum Myeongjo",Batang,serif; }
+.bk u { position:absolute; left:0; right:0; bottom:4%; height:9%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:6px; opacity:.75; overflow:hidden; white-space:nowrap; }
+.bk.s0::before { content:""; position:absolute; left:0; right:0; top:5%; height:5%; background:var(--a); }
+.bk.s0::after { content:""; position:absolute; left:0; right:0; bottom:15%; height:1.5px; background:var(--a); }
+.bk.s1::after { content:""; position:absolute; left:0; right:0; bottom:0; height:16%; background:var(--a); }
+.bk.s1 u { color:var(--c); opacity:.9; }
+.bk.s2::before { content:""; position:absolute; left:0; right:0; top:7%; height:4px; border-top:1.5px solid var(--a); border-bottom:1.5px solid var(--a); }
+.bk.s3::before { content:""; position:absolute; left:0; right:0; top:0; height:11%; background:var(--a); }
+.bk.s3::after { content:""; position:absolute; left:0; right:0; bottom:14%; height:1px; background:currentColor; opacity:.5; }
+.bk.loose { outline:1px dashed rgba(255,235,200,.35); outline-offset:-1px; }
+@media (hover:hover) { .bk:hover { transform:translateY(-7px); z-index:3; filter:brightness(1.15); } }
+.wall.dim .bk { opacity:.16; filter:saturate(.3); }
+.wall.dim .bk.hit { opacity:1; filter:none; transform:translateY(-12px); z-index:4; box-shadow:0 0 0 2px var(--accent), 0 0 22px 4px rgba(62,207,142,.55); }
+.pin { position:absolute; z-index:6; transform:translate(-50%,-100%); pointer-events:none; animation:bob 1.2s ease-in-out infinite; }
+.pin span { display:block; background:var(--accent); color:#052a17; font-size:11px; font-weight:800; padding:4px 8px; border-radius:6px; white-space:nowrap; box-shadow:0 6px 16px rgba(0,0,0,.5); }
+.pin::after { content:""; display:block; width:0; height:0; margin:0 auto; border:6px solid transparent; border-top-color:var(--accent); }
+@keyframes bob { 50% { transform:translate(-50%, calc(-100% - 5px)); } }
+.door { margin:26px auto 0; width:62%; height:260px; border-radius:4px 4px 0 0; position:relative; background:linear-gradient(90deg,#1d1915,#26211b 50%,#1d1915); border:6px solid #3a3028; border-bottom:0; box-shadow:inset 0 0 30px rgba(0,0,0,.6); }
+.door::after { content:""; position:absolute; right:14%; top:52%; width:8px; height:8px; border-radius:50%; background:#b9a17a; }
+.door span { position:absolute; inset:auto 0 18px; text-align:center; font-size:11px; color:#6e6152; letter-spacing:.3em; }
+.tip { position:fixed; z-index:60; pointer-events:none; display:none; gap:12px; width:280px; padding:12px; border-radius:12px; background:rgba(24,22,20,.97); border:1px solid #3a332b; box-shadow:0 18px 40px rgba(0,0,0,.6); }
+.tip img, .tip .noimg { width:58px; height:84px; object-fit:cover; border-radius:3px; flex:none; background:#2d2822; }
+.tip b { display:block; font-size:14px; line-height:1.35; color:#f4ecdf; }
+.tip small { display:block; font-size:12px; color:#a99880; margin-top:4px; }
+.tip em { display:block; font-style:normal; font-size:12px; color:var(--accent); margin-top:8px; font-weight:700; }
+.drawer { position:fixed; top:0; right:0; bottom:0; width:400px; max-width:100%; z-index:70; background:#17150f; border-left:1px solid #332c23; transform:translateX(100%); transition:transform .28s cubic-bezier(.2,.8,.2,1); display:flex; flex-direction:column; box-shadow:-20px 0 50px rgba(0,0,0,.5); }
+.drawer.open { transform:none; }
+.drawer .dh { position:relative; border-bottom:1px solid #2c261f; padding:20px 22px 16px; }
+.drawer .dh .k { font-size:11px; letter-spacing:.25em; color:#b89a72; font-weight:700; }
+.drawer .dh h2 { margin:6px 0 4px; font-size:20px; color:#f4ecdf; }
+.drawer .dh p { margin:0; font-size:13px; color:#a08d74; }
+.drawer .x { position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%; border:1px solid #3a332b; background:#221e18; color:#ddd; cursor:pointer; font-size:15px; }
+.drawer .dl { overflow-y:auto; padding:6px 14px 30px; }
+.drawer h3 { font-size:12px; color:#b89a72; letter-spacing:.08em; margin:18px 8px 8px; }
+.r2 { display:grid; grid-template-columns:28px 40px 1fr; gap:12px; align-items:center; padding:8px; border-radius:8px; cursor:pointer; }
+.r2:hover { background:#221e18; }
+.r2.me { background:rgba(62,207,142,.1); box-shadow:inset 0 0 0 1px rgba(62,207,142,.4); }
+.r2 .rn { font-size:12px; font-weight:800; color:#8c7a63; text-align:right; }
+.r2.me .rn { color:var(--accent); }
+.r2 img, .r2 .noimg { width:40px; height:58px; object-fit:cover; border-radius:2px; background:#2d2822; display:block; }
+.r2 b { display:block; font-size:14px; color:#efe6d8; line-height:1.35; font-weight:600; }
+.r2 small { display:block; font-size:12px; color:#8f7f6a; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.scrim { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:65; opacity:0; pointer-events:none; transition:opacity .25s; }
+.scrim.on { opacity:1; pointer-events:auto; }
+.mini { display:flex; gap:10px; align-items:center; background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; margin-top:14px; cursor:pointer; flex-wrap:wrap; }
+.mcase { background:#2a1d12; border:1px solid #4a3523; border-radius:5px; padding:4px; width:64px; }
+.mcase.B { width:44px; }
+.mname { font-size:10px; color:#e8d6c0; text-align:center; margin-bottom:2px; }
+.mlv { display:flex; gap:2px; margin-bottom:2px; }
+.mlv span { flex:1; height:12px; background:#1a120b; border-bottom:2px solid #6b4c30; border-radius:2px; }
+.mlv span.on { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.mgo { font-size:13px; color:var(--muted); line-height:1.6; margin-left:6px; }
+.mgo b { color:var(--accent); }
+@media (max-width:900px) {
+  .room { padding:22px 12px 0; } .room::after { margin:0 -12px; }
+  .wall { grid-template-columns:1fr; gap:34px; } .door { display:none; }
+  .spn, .cempty { height:92px; }
+  .drawer { top:auto; height:78vh; width:100%; border-left:0; border-top:1px solid #332c23; border-radius:16px 16px 0 0; transform:translateY(100%); }
+  .drawer.open { transform:none; }
+  .tip { display:none !important; }
+}
 </style>
 </head>
 <body>
@@ -88,12 +193,16 @@ footer { color:var(--dim); font-size:12px; padding:20px 0 36px; border-top:1px s
   <nav class="tabs" id="tabs"></nav>
   <div class="right">
     <input type="search" id="q" placeholder="검색" oninput="state.q=this.value; state.page=1; render()">
+    <button class="btn" id="mapBtn" onclick="state.view = state.view==='map' ? 'grid' : 'map'; render(); window.scrollTo(0,0)">책장 지도</button>
     <button class="btn" id="statBtn" onclick="state.view = state.view==='stats' ? 'grid' : 'stats'; render()">통계</button>
   </div>
 </div></header>
 <main><div class="wrap" id="main"></div></main>
 <footer><div class="wrap" id="foot"></div></footer>
 <div class="modal" id="modal" onclick="if(event.target===this) closeBook()"><div class="box" id="box"></div></div>
+<div class="tip" id="tip"></div>
+<div class="scrim" id="scrim" onclick="closeCell()"></div>
+<aside class="drawer" id="drawer"><div class="dh"><div class="k" id="dk"></div><h2 id="dt"></h2><p id="dp"></p><button class="x" onclick="closeCell()" aria-label="닫기">✕</button></div><div class="dl" id="dl"></div></aside>
 <script>
 const PER = 48;
 const state = { cat: '', q: '', sort: 'recent', page: 1, view: 'grid' };
@@ -106,9 +215,11 @@ function go(cat) { state.cat = cat; state.page = 1; state.view = 'grid'; render(
 function filtered() {
   // 띄어쓰기·문장부호 무시 검색 ('총, 균, 쇠' ↔ '총 균 쇠')
   const norm = s => String(s || '').toLowerCase().replace(/[\s\-_:;,.·・'"!?()\[\]<>《》〈〉「」『』]/g, '');
-  const q = norm(state.q);
+  const FOLD = [['제레미','제러미'],['리챠드','리처드'],['챠','차'],['쥬','주'],['죠','조'],['쉬','시'],['쉐','셰'],['훼','페'],['화이','파이']];
+  const key = s => FOLD.reduce((t, [a, b]) => t.split(a).join(b), norm(s));  // 외국 이름 표기 통합 (제레미 = 제러미)
+  const q = key(state.q);
   let list = BOOKS.filter(b => (!state.cat || b.genre[0] === state.cat) &&
-    (!q || norm(b.title + b.dir + b.publisher).includes(q)));
+    (!q || key(b.title + b.dir + b.publisher).includes(q)));
   const by = { title: (a, b) => a.title.localeCompare(b.title, 'ko'), author: (a, b) => a.dir.localeCompare(b.dir, 'ko'),
                year: (a, b) => (b.year || '').localeCompare(a.year || '') };
   if (by[state.sort]) list = [...list].sort(by[state.sort]);
@@ -124,6 +235,10 @@ function renderTabs() {
 function render() {
   renderTabs();
   const main = document.getElementById('main');
+  document.getElementById('mapBtn').classList.toggle('on', state.view === 'map');
+  document.getElementById('statBtn').classList.toggle('on', state.view === 'stats');
+  clearPins(); closeCell();
+  if (state.view === 'map') { main.innerHTML = mapHTML(); setupMap(); history.replaceState(null, '', '#map'); return; }
   if (state.view === 'stats') { main.innerHTML = statsHTML(); return; }
   const list = filtered();
   const pages = Math.max(1, Math.ceil(list.length / PER));
@@ -173,6 +288,7 @@ function openBook(id) {
         <h1>${esc(b.title)}</h1>
         <div class="meta">${esc(b.dir || '저자 미상')}${b.year ? ' · ' + b.year : ''}${b.publisher ? ' · ' + esc(b.publisher) : ''}</div>
         <div class="own">✓ 대장님 책장 ${b.copies}권${b.place ? ' · 📍 ' + esc(b.place) : ''}</div>
+        ${miniMap(b)}
         ${b.desc ? `<p class="desc">${esc(b.desc)}${b.desc.length >= 190 ? '…' : ''}</p><div class="src">책 소개: 카카오 책 검색 (출판사 제공)</div>` : ''}
         ${b.link ? `<p style="margin-top:14px"><a class="btn" href="${esc(b.link)}" target="_blank" rel="noopener">책 정보 보기</a></p>` : ''}
       </div>
@@ -183,14 +299,128 @@ function openBook(id) {
   document.body.style.overflow = 'hidden';
   history.replaceState(null, '', '#' + id);
 }
-function closeBook() { document.getElementById('modal').classList.remove('on'); document.body.style.overflow = ''; history.replaceState(null, '', location.pathname); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBook(); });
+function closeBook() { document.getElementById('modal').classList.remove('on'); document.body.style.overflow = ''; history.replaceState(null, '', state.view === 'map' ? '#map' : location.pathname); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBook(); closeCell(); } });
 
-Promise.all([fetch('data/books.json').then(r => r.json()), fetch('data/stats.json').then(r => r.json())]).then(([b, s]) => {
-  BOOKS = b; STATS = s;
+// ── 책장 지도 ──
+let SHELVES = { cases: [], palette: [] }, CELLS = {}, BY = {};
+const FOLD2 = [['제레미','제러미'],['리챠드','리처드'],['챠','차'],['쥬','주'],['죠','조'],['쉬','시'],['쉐','셰'],['훼','페'],['화이','파이']];
+const skey = s => FOLD2.reduce((t, [a, b]) => t.split(a).join(b), String(s || '').toLowerCase().replace(/[\s\-_:;,.·・'"!?()\[\]<>《》〈〉「」『』]/g, ''));
+const hueOf = t => [...t].reduce((a, c) => a + c.codePointAt(0), 0) % 360;
+function indexShelves() {
+  CELLS = {}; BY = Object.fromEntries(BOOKS.map(b => [b.id, b]));
+  for (const c of SHELVES.cases) for (const row of c.rows) for (const cell of row) CELLS[cell.id] = cell;
+}
+function whereOf(b) { return b.place ? b.place.split(' / ')[0] : ''; }
+function spine(id, pos) {
+  const b = BY[id]; if (!b) return '';
+  const h = hueOf(b.title), p = SHELVES.palette[h % SHELVES.palette.length];
+  const [c, a, ink] = b.spine || [p[0], p[1], p[1]];
+  return `<span class="bk s${h % 4}${h % 3 === 0 ? ' serif' : ''}${pos ? '' : ' loose'}" data-id="${esc(id)}" style="--c:${c};--a:${a};--ink2:${ink};--w:${8 + (h * 13) % 9};--hgt:${74 + (h * 7) % 24}%"><i>${esc(b.title)}</i><u>${esc((b.publisher || '').slice(0, 4))}</u></span>`;
+}
+function mapHTML() {
+  const nback = Object.values(CELLS).reduce((n, c) => n + c.back.length, 0);
+  return `<div class="room">
+    <div class="mhead"><div><div class="eyebrow">AZIT LIBRARY · WALL MAP</div><h1>아지트 책장</h1>
+      <div class="chips"><span>위치 기록 ${STATS.located || 0}권</span><span>${Object.keys(CELLS).length}칸</span>${nback ? `<span>뒷줄 ${nback}권</span>` : ''}<span>위치 모름 ${STATS.total_copies - (STATS.located || 0)}권</span></div></div>
+      <label class="seek"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e9dcc6" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="mq" type="search" placeholder="어떤 책을 찾으세요? 제목이나 저자" autocomplete="off" value="${esc(state.mq || '')}"></label></div>
+    <div class="mres" id="mres"></div>
+    <div class="wall" id="wall">${SHELVES.cases.map(c => `<div><div class="case">
+      <div class="plaque">${esc(c.id)}${c.id === 'B' ? ' · 문 위' : ''}<small>${c.n}권</small></div>
+      ${c.rows.map(row => `<div class="lv" style="--slots:${row.length}">${row.map(cell => `<div class="cell" data-cell="${esc(cell.id)}">
+        ${cell.n ? `<div class="spn">${cell.front.map(([id, pos]) => spine(id, pos)).join('')}${cell.loose.map(id => spine(id, null)).join('')}</div>` : '<div class="cempty">아직 안 찍음</div>'}
+        ${cell.back.length ? `<span class="backrow">뒷줄 ${cell.back.length}</span>` : ''}<span class="ctag">${esc(cell.id)}<b>${cell.n}</b></span></div>`).join('')}</div>`).join('')}
+      </div>${c.id === 'B' ? '<div class="door"><span>DOOR</span></div>' : ''}</div>`).join('')}</div></div>`;
+}
+function setupMap() {
+  const wall = document.getElementById('wall'), tip = document.getElementById('tip');
+  wall.addEventListener('mousemove', e => {
+    const s = e.target.closest('.bk'); if (!s) { tip.style.display = 'none'; return; }
+    const b = BY[s.dataset.id];
+    tip.innerHTML = `${b.cover ? `<img src="${esc(b.cover)}" alt="">` : '<div class="noimg"></div>'}<div><b>${esc(b.title)}</b><small>${esc(b.dir)}</small><em>📍 ${esc(whereOf(b))}</em></div>`;
+    tip.style.display = 'flex';
+    tip.style.left = Math.min(e.clientX + 16, innerWidth - 300) + 'px'; tip.style.top = Math.min(e.clientY + 16, innerHeight - 120) + 'px';
+  });
+  wall.addEventListener('mouseleave', () => tip.style.display = 'none');
+  wall.addEventListener('click', e => {
+    const s = e.target.closest('.bk');
+    if (s && matchMedia('(hover: hover)').matches) { tip.style.display = 'none'; openBook(s.dataset.id); return; }
+    const cell = e.target.closest('.cell'); if (cell) openCell(cell.dataset.cell, s ? s.dataset.id : null);
+  });
+  let timer;
+  document.getElementById('mq').addEventListener('input', e => { state.mq = e.target.value; clearTimeout(timer); timer = setTimeout(() => mapSearch(true), 160); });
+  document.getElementById('mres').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { const bk = BY[b.dataset.id]; openCell(bk.loc[0].shelf, bk.id); } });
+  if (state.mq) mapSearch(true);
+}
+function clearPins() { document.querySelectorAll('.pin').forEach(p => p.remove()); }
+function light(ids, on) {
+  clearPins();
+  const wall = document.getElementById('wall'); if (!wall) return [];
+  const spines = [...wall.querySelectorAll('.bk')];
+  spines.forEach(s => s.classList.toggle('hit', ids.has(s.dataset.id)));
+  wall.classList.toggle('dim', on);
+  const lit = spines.filter(s => s.classList.contains('hit'));
+  if (lit.length && lit.length <= 3) setTimeout(() => lit.forEach(s => {
+    const r = s.getBoundingClientRect(), pin = document.createElement('div');
+    pin.className = 'pin'; pin.innerHTML = '<span>여기</span>';
+    pin.style.left = (r.left + r.width / 2 + scrollX) + 'px'; pin.style.top = (r.top + scrollY - 14) + 'px';
+    document.body.appendChild(pin);
+  }), 220);
+  return lit;
+}
+function mapSearch(scroll) {
+  const raw = state.mq || '', q = skey(raw), res = document.getElementById('mres');
+  if (!q) { light(new Set(), false); res.innerHTML = ''; return; }
+  const found = BOOKS.filter(b => b.loc && b.loc.length && skey(b.title + b.dir).includes(q));
+  const lit = light(new Set(found.map(b => b.id)), true);
+  const missing = found.length ? '' : (BOOKS.some(b => skey(b.title + b.dir).includes(q)) ? '서재에는 있는데 아직 위치를 모르는 책이에요.' : '등록된 책 중에는 없어요. (아직 확인 중인 책일 수 있어요)');
+  res.innerHTML = found.length
+    ? found.slice(0, 10).map(b => `<button data-id="${esc(b.id)}">${esc(b.title)} <i>${esc(whereOf(b))}</i></button>`).join('') + (found.length > 10 ? `<span class="none">외 ${found.length - 10}권</span>` : '')
+    : `<span class="none">${missing}</span>`;
+  if (scroll && lit[0]) lit[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function openCell(id, me) {
+  const c = CELLS[id]; if (!c) return;
+  document.querySelectorAll('.cell.sel').forEach(x => x.classList.remove('sel'));
+  document.querySelector(`.cell[data-cell="${id}"]`)?.classList.add('sel');
+  document.getElementById('dk').textContent = id;
+  document.getElementById('dt').textContent = c.name;
+  document.getElementById('dp').textContent = `${c.n}권 · 사진에서 읽은 순서 (왼쪽 → 오른쪽)`;
+  const row = (bid, n) => { const b = BY[bid]; return b ? `<div class="r2 ${bid === me ? 'me' : ''}" onclick="openBook('${esc(bid)}')"><span class="rn">${n}</span>${b.cover ? `<img src="${esc(b.cover)}" alt="" loading="lazy">` : '<span class="noimg"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.dir)}</small></span></div>` : ''; };
+  let html = '';
+  if (c.front.length) html += '<h3>앞줄 · 왼쪽부터</h3>' + c.front.map(([bid, pos]) => row(bid, pos)).join('');
+  if (c.back.length) html += '<h3>뒷줄 · 앞줄 책 뒤에 가려져 있어요</h3>' + c.back.map(bid => row(bid, '뒤')).join('');
+  if (c.loose.length) html += '<h3>이 칸에 있지만 순서 모름</h3>' + c.loose.map(bid => row(bid, '·')).join('');
+  document.getElementById('dl').innerHTML = html || '<p style="color:#8f7f6a;padding:12px">아직 이 칸 사진이 없어요.</p>';
+  document.getElementById('drawer').classList.add('open'); document.getElementById('scrim').classList.add('on');
+  if (me) setTimeout(() => document.querySelector('.r2.me')?.scrollIntoView({ block: 'center' }), 300);
+}
+function closeCell() { document.getElementById('drawer').classList.remove('open'); document.getElementById('scrim').classList.remove('on'); }
+function showOnMap(id) {
+  const b = BY[id]; closeBook(); state.view = 'map'; state.mq = ''; render(); window.scrollTo(0, 0);
+  const lit = light(new Set([id]), true);
+  document.getElementById('mres').innerHTML = `<button data-id="${esc(id)}">${esc(b.title)} <i>${esc(whereOf(b))}</i></button>`;
+  if (lit[0]) setTimeout(() => lit[0].scrollIntoView({ block: 'center' }), 50);
+  setTimeout(() => openCell(b.loc[0].shelf, id), 450);
+}
+function miniMap(b) {
+  if (!b.loc || !b.loc.length || !SHELVES.cases.length) return '';
+  const here = new Set(b.loc.map(l => l.shelf));
+  return `<div class="mini" onclick="showOnMap('${esc(b.id)}')">${SHELVES.cases.map(c => `<div class="mcase ${esc(c.id)}"><div class="mname">${esc(c.id)}</div>
+    ${c.rows.map(row => `<div class="mlv">${row.map(cell => `<span class="${here.has(cell.id) ? 'on' : ''}"></span>`).join('')}</div>`).join('')}</div>`).join('')}
+    <div class="mgo">📍 ${esc(whereOf(b))}<br><b>책장 지도에서 보기 →</b></div></div>`;
+}
+
+
+Promise.all([fetch('data/books.json').then(r => r.json()), fetch('data/stats.json').then(r => r.json()),
+             fetch('data/shelves.json').then(r => r.json()).catch(() => ({ cases: [], palette: [] }))]).then(([b, s, sh]) => {
+  BOOKS = b; STATS = s; SHELVES = sh; indexShelves();
+  if (location.hash === '#map') state.view = 'map';
   document.getElementById('foot').textContent = `아지트 LIBRARY · 대장님 책장 ${s.total_copies}권 · ${s.updated} 기준 · 책 정보와 표지: 카카오 책 검색`;
   render();
-  if (location.hash.length > 1) openBook(location.hash.slice(1));
+  if (location.hash.length > 1 && location.hash !== '#map') openBook(location.hash.slice(1));
+  addEventListener('hashchange', () => { if (location.hash === '#map' && state.view !== 'map') { state.view = 'map'; render(); } });
 });
 </script>
 </body>
